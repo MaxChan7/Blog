@@ -1,0 +1,25 @@
+{
+  "name": "Blog",
+  "version": "1.0.0",
+  "description": "🤔写写文章，沉淀一下~",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "deploy": "bash deploy.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaxChan7/Blog.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MaxChan7/Blog/issues"
+  },
+  "homepage": "https://github.com/MaxChan7/Blog#readme"
+}
