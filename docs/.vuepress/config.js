@@ -28,6 +28,7 @@ module.exports = {
                     '/sharing/H5玩转下拉上滑',
                 ]
             }
-        ]
+        ],
+        sidebarDepth: 2
     }
 }
