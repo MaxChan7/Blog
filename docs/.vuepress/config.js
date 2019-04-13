@@ -1,5 +1,5 @@
 module.exports = {
-    title: "Max's Blog",
+    title: "Max's blog",
     description: 'Max的博客，写写文章，沉淀一下~🤔',
     head: [
         ['link', { rel: 'icon', href: '/favicon.ico' }]
@@ -29,6 +29,7 @@ module.exports = {
                 ]
             }
         ],
-        sidebarDepth: 2
+        sidebarDepth: 2,
+        lastUpdated: 'Last Updated'
     }
 }

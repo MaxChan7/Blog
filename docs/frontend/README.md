@@ -4,8 +4,8 @@
 
 JS中内置的类型有两种：**基本类型**和**引用类型**。
 
-- 基本类型：Undefined、Null、Boolean、Number、String和symbol。这6种基本数据类型是按值访问的，因为可以操作保存在变量中的实际值。
-- 引用类型：Object。引用类型的值的值是保存在内存中的对象。而Js是不允许直接访问内存中的位置，也就是说不能直接操作对象的内存空间。操作对象时，实际上是操作对象的引用而非实际对象。
+- 基本类型：`Undefined`、`null`、`Boolean`、`Number`、`String`和`symbol`。这6种基本数据类型是按值访问的，因为可以操作保存在变量中的实际值。
+- 引用类型：`Object`。引用类型的值的值是保存在内存中的对象。而Js是不允许直接访问内存中的位置，也就是说不能直接操作对象的内存空间。操作对象时，实际上是操作对象的引用而非实际对象。
 
 ### 动态的属性
 
@@ -129,3 +129,76 @@ ToPrimitive([]) == 0
 
 1. 如果是对象，就通过`toPrimitive`转换对象
 2. 如果是字符串，就通过`unicode`字符索引来比较
+
+## typeof 和 instanceof
+
+### typeof
+
+`typeof`几乎不可能得到它们想要的结果。`typeof`只有一个实际应用场景，就是用来检测一个对象是否已经定义或者是否已经赋值。而这个应用却不是来检查对象的类型。
+
+`typeof`对于基本类型，除了`null`都可以显示正确的类型（历史遗留[bug](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/typeof#null)）
+
+```js
+typeof 1 // 'number'
+typeof '1' // 'string'
+typeof undefined // 'undefined'
+typeof true // 'boolean'
+typeof Symbol() // 'symbol'
+typeof b // b 没有声明，但是还会显示 undefined
+typeof null // 'object'
+```
+
+`typeof`对于对象，除了函数都会显示`object`
+
+```js
+typeof [] // 'object'
+typeof {} // 'object'
+typeof console.log // 'function'
+```
+
+所以我们发现`typeof`判断数据类型并不准确，所以我们想获得一个变量的正确类型，我们需要利用`Object.prototype.toString.call()`方法来判断数据类型，通过该方法，我们可以获得类似`[Object, Type]`这样的字符串。
+
+```js
+Object.prototype.toString.call(1) // "[object Number]"
+Object.prototype.toString.call('hi') // "[object String]"
+Object.prototype.toString.call({a:'hi'}) // "[object Object]"
+Object.prototype.toString.call([1,'a']) // "[object Array]"
+Object.prototype.toString.call(true) // "[object Boolean]"
+Object.prototype.toString.call(() => {}) // "[object Function]"
+Object.prototype.toString.call(null) // "[object Null]"
+Object.prototype.toString.call(undefined) // "[object Undefined]"
+Object.prototype.toString.call(Symbol(1)) // "[object Symbol]"
+```
+
+### instanceof
+
+`instanceof`可以用来判断某个构造函数的`prototype`属性是否存在于要检测对象的`原型链`上。
+
+```js
+// 定义构造函数
+function C(){} 
+function D(){} 
+
+var o = new C();
+
+o instanceof C; // true，因为 Object.getPrototypeOf(o) === C.prototype
+
+o instanceof D; // false，因为 D.prototype不在o的原型链上
+
+o instanceof Object; // true,因为Object.prototype.isPrototypeOf(o)返回true
+C.prototype instanceof Object // true,同上
+
+C.prototype = {};
+var o2 = new C();
+
+o2 instanceof C; // true
+
+o instanceof C; // false,C.prototype指向了一个空对象,这个空对象不在o的原型链上.
+
+D.prototype = new C(); // 继承
+var o3 = new D();
+o3 instanceof D; // true
+o3 instanceof C; // true 因为C.prototype现在在o3的原型链上
+```
+
+需要注意的是，如果表达式 `obj instanceof Foo` 返回`true`，则并不意味着该表达式会永远返回`true`，因为`Foo.prototype`属性的值有可能会改变，改变之后的值很有可能不存在于obj的原型链上，这时原表达式的值就会成为`false`。另外一种情况下，原表达式的值也会改变，就是改变对象obj的原型链的情况，虽然在目前的ES规范中，我们只能读取对象的原型而不能改变它，但借助于非标准的`__proto__`伪属性，是可以实现的。比如执行`obj.__proto__ = {}`之后，`obj instanceof Foo`就会返回`false`了。
