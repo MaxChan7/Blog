@@ -202,3 +202,36 @@ o3 instanceof C; // true 因为C.prototype现在在o3的原型链上
 ```
 
 需要注意的是，如果表达式 `obj instanceof Foo` 返回`true`，则并不意味着该表达式会永远返回`true`，因为`Foo.prototype`属性的值有可能会改变，改变之后的值很有可能不存在于obj的原型链上，这时原表达式的值就会成为`false`。另外一种情况下，原表达式的值也会改变，就是改变对象obj的原型链的情况，虽然在目前的ES规范中，我们只能读取对象的原型而不能改变它，但借助于非标准的`__proto__`伪属性，是可以实现的。比如执行`obj.__proto__ = {}`之后，`obj instanceof Foo`就会返回`false`了。
+
+## 变量提升
+
+JS中，函数及变量的声明都将被提升到函数的最顶部。变量可以在使用后声明，也就是变量可以先使用再声明。
+
+```js
+a = "hello"; // 变量 a 设置为 "hello"
+console.log(a); // "hello"
+sayHi(); // "say hi"
+
+// 以下声明都会提升
+var a; // 声明 a
+function sayHi() {
+  console.log("say hi");
+}
+```
+
+**JavaScript 仅提升声明，而不提升初始化**。如果你先使用的变量，再声明并初始化它，变量的值将是 undefined。
+
+```js
+var x = 1;                 // 声明 + 初始化 x
+console.log(x + " " + y);  // '1 undefined'
+var y = 2;                 // 声明 + 初始化 y
+
+
+//上面的代码和下面的代码是一样的 
+var x = 1;                 // 声明 + 初始化 x
+var y;                     //声明 y
+console.log(x + " " + y);  //y 是未定义的
+y = 2;                     // 初始化  y 
+```
+
+需要注意的是严格模式(strict mode)不允许使用未声明的变量，所以养成良好的习惯，**在头部声明你的变量**。
