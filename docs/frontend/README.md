@@ -235,3 +235,87 @@ y = 2;                     // 初始化  y
 ```
 
 需要注意的是严格模式(strict mode)不允许使用未声明的变量，所以养成良好的习惯，**在头部声明你的变量**。
+
+## 闭包
+
+`闭包`是函数和声明该函数的词法环境的组合。**这个环境包含了这个闭包创建时所能访问的所有局部变量**。
+
+例如函数 A 返回了一个函数 B，并且函数 B 中使用了函数 A 的变量，函数 B 就被称为闭包。
+
+```js
+function A() {
+  let a = 1;
+  function B() {
+    console.log(a);
+  };
+  return B;
+};
+```
+
+经典面试题，循环中使用闭包解决 var 定义函数的问题。
+
+```js
+for ( var i = 1; i <= 5; i++) {
+	setTimeout(function timer() {
+		console.log(i);
+	}, i*1000);
+}
+```
+
+首先因为 setTimeout 是个异步函数，所有会先把循环全部执行完毕，这时候 i 就是 6 了，所以会输出一堆 6。
+
+解决办法两种，第一种使用`闭包`:
+
+```js
+for (var i = 1; i <= 5; i++) {
+  (function(j) {
+    setTimeout(function timer() {
+      console.log(j);
+    }, j * 1000);
+  })(i);
+}
+```
+
+第二种就是使用 setTimeout 的第三个参数:
+
+```js
+for (var i = 1; i <= 5; i++) {
+	setTimeout(function timer(j) {
+		console.log(j);
+	}, i*1000, i);
+}
+```
+
+第三种就是使用 let 定义 i 了:
+
+```js
+for (let i = 1; i <= 5; i++) {
+	setTimeout(function timer() {
+		console.log(i);
+	}, i*1000 );
+}
+```
+
+下面是一个更有意思的示例 — `makeAdder` 函数：
+
+```js
+function makeAdder(x) {
+  return function(y) {
+    return x + y;
+  };
+}
+
+var add5 = makeAdder(5);
+var add10 = makeAdder(10);
+
+console.log(add5(2));  // 7
+console.log(add10(2)); // 12
+```
+
+在这个示例中，我们定义了 makeAdder(x) 函数，它接受一个参数 x ，并返回一个新的函数。返回的函数接受一个参数 y，并返回x+y的值。
+
+从本质上讲，makeAdder 是一个函数工厂 — 他创建了将指定的值和它的参数相加求和的函数。在上面的示例中，我们使用函数工厂创建了两个新函数 — 一个将其参数和 5 求和，另一个和 10 求和。
+
+add5 和 add10 都是闭包。它们共享相同的函数定义，但是保存了不同的词法环境。在 add5 的环境中，x 为 5。而在 add10 中，x 则为 10。
+
+这也是经典面试题实现 `add(2)(5) // => 7`的实现方法。
