@@ -325,7 +325,7 @@ console.log(add10(2)); // 12
 ### 理解原型对象
 无论什么时候，只要创建一个新函数，就会根据一组特定的规则为该函数创建一个`prototype`属性，这个属性指向函数的的原型对象。默认情况下，所有原型对象都会自动获得一个`constructor`（构造函数）属性，这个属性包含一个指向prototype属性所在函数的指针。
 
-实例无法访问到`[[Prototype]]`，但可以通过isPrototypeOf()方法可以去确定对象之间是否存在这种关系。从本质上说，如果`[[Prototype]]`指向调用`isPrototypeOf()`方法的对象(`Person.prototype`),那么这个方法返回true,如下：
+实例无法访问到`[[Prototype]]`，但可以通过`isPrototypeOf()`方法可以去确定对象之间是否存在这种关系。从本质上说，如果`[[Prototype]]`指向调用`isPrototypeOf()`方法的对象(`Person.prototype`),那么这个方法返回`true`,如下：
 ```js
 alert(Person.prototype.isPrototype(person1)); //true
 alert(Person.prototype.isPrototype(person2)); //true
