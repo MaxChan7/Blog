@@ -656,3 +656,35 @@ console.log(son.getValue === son.__proto__.__proto__.getValue); // true
 - `Object.prototype` 是**顶级对象**，所有对象都继承自它。
 - `Object.prototype.__proto__ === null` ，说明原型链到 `Object.prototype` 终止。
 - `Function.__proto__` 指向 `Function.prototype`。
+
+## new
+
+在调用 new 的过程中会发生以上四件事情:
+1. 新生成了一个对象
+2. 链接到原型
+3. 绑定 this
+4. 返回新对象
+
+换成代码就相当于:
+
+```js
+var obj  = {};
+obj.__proto__ = F.prototype;
+F.call(obj);
+```
+
+既然知道它做了啥，那我们也可以试着去实现一个`new`方法:
+```js
+function create() {
+  // 创建一个空的对象
+  let obj = new Object()
+  // 获得构造函数
+  let Con = [].shift.call(arguments)
+  // 链接到原型
+  obj.__proto__ = Con.prototype
+  // 绑定 this，执行构造函数
+  let result = Con.apply(obj, arguments)
+  // 确保 new 出来的是个对象
+  return typeof result === 'object' ? result : obj
+}
+```
