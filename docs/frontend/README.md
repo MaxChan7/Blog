@@ -688,3 +688,165 @@ function create() {
   return typeof result === 'object' ? result : obj
 }
 ```
+
+## this、call、apply和bind
+
+JavaScript 中最容易被误解的一点就是 `this` 关键字。
+
+其实 this 的指向，始终坚持一个原理：**this 永远指向最后调用它的那个对象**。记住这句话，`this` 你已经了解一半了。
+
+### 隐式绑定
+
+为了判断 `this` 关键字的引用，函数被调用时先看一看点号左侧。如果有“点”就查看点左侧的对象，这个对象就是 `this` 的指向（user）。
+
+```js
+var user = {
+  name: 'Max',
+  age: 27,
+  greet() {
+    alert(`Hello, my name is ${this.name}`)
+  }
+}
+user.greet() // Hello, my name is Max
+```
+
+### 显式绑定
+
+我们可以用`call`、`apply` 和 `bind`去改变`this`的指向。
+
+这三个的**区别**是：
+- 除了第一个参数外，`call` 可以接收一个参数列表，`apply` 只接受一个参数数组。
+- `bind` 和其他两个方法作用也是一致的，除了不会立刻调用函数，而是返回一个能以后调用的新函数。
+
+```js
+function greet (lang1, lang2, lang3) {
+  console.log(`Hello, my name is ${this.name} and I know ${lang1}, ${lang2}, and ${lang3}`)
+}
+
+var user = {
+  name: 'Max',
+  age: 27,
+}
+
+var languages = ['JavaScript', 'HTML', 'CSS']
+
+// 分别用call、apply和bind去实现
+
+greet.call(user, languages[0], languages[1], languages[2]); // "Hello, my name is Max and I know JavaScript, HTML, and CSS"
+
+greet.apply(user, languages); // "Hello, my name is Max and I know JavaScript, HTML, and CSS"
+
+var newFn = greet.bind(user, languages[0], languages[1], languages[2])
+newFn() // "Hello, my name is Max and I know JavaScript, HTML, and CSS"
+```
+
+### new 绑定
+
+在`new`那一节我们说过，`new`做的其中一件事就是**绑定 `this`**。
+
+```js
+function User (name, age) {
+  /*
+    JavaScript 会在底层创建一个新对象 `this`，它会代理不在 User 原型链上的属性。
+    如果一个函数用 new 关键字调用，this 就会指向解释器创建的新对象。
+  */
+  this.name = name
+  this.age = age
+}
+
+var me = new User('Max', 27)
+```
+
+### 优先级
+
+new绑定 > 显示绑定 > 隐式绑定
+
+如果以上三种情况都没有的话，`this`默认指向全局对象`window`。
+
+```js
+var age = 27;
+
+function sayAge () {
+  console.log(`My age is ${this.age}`)
+}
+
+sayAge() // My age is 27
+```
+
+但需要注意的是，在`严格模式`下，`this`并不会指向全局对象，而是保持为`undefined`。
+
+### 箭头函数
+
+`箭头函数`其实是没有 `this` 的，这个函数中的 `this` 只取决于他外面的第一个不是箭头函数的函数的 `this`。在这个例子中，因为调用 `a` 符合前面代码中的第一个情况，所以 `this` 是 `window`。并且 `this` 一旦绑定了上下文，就不会被任何代码改变。
+
+```js
+function a() {
+  return () => {
+    return () => {
+      console.log(this);
+    };
+  };
+};
+console.log(a()()()); // Window
+```
+
+### 模拟实现
+
+可以从以下几点来考虑如何实现
+
+- 不传入第一个参数，那么默认为 `window`
+- 改变了 `this` 指向，让新的对象可以执行该函数。那么思路是否可以变成给新的对象添加一个函数，然后在执行完以后删除？
+```js
+Function.prototype.myCall = function (context) {
+  var context = context || window
+  // 给 context 添加一个属性
+  context.fn = this
+  // 将 context 后面的参数取出来
+  var args = [...arguments].slice(1)
+  var result = context.fn(...args)
+  // 删除 fn
+  delete context.fn
+  return result
+}
+```
+
+以上就是 call 的思路，apply 的实现也类似
+
+```js
+Function.prototype.myApply = function (context) {
+  var context = context || window
+  context.fn = this
+
+  var result
+  // 需要判断是否存储第二个参数
+  // 如果存在，就将第二个参数展开
+  if (arguments[1]) {
+    result = context.fn(...arguments[1])
+  } else {
+    result = context.fn()
+  }
+
+  delete context.fn
+  return result
+}
+```
+
+`bind` 和其他两个方法作用也是一致的，只是该方法会返回一个函数。并且我们可以通过 `bind` 实现柯里化。
+
+```js
+Function.prototype.myBind = function (context) {
+  if (typeof this !== 'function') {
+    throw new TypeError('Error')
+  }
+  var _this = this
+  var args = [...arguments].slice(1)
+  // 返回一个函数
+  return function F() {
+    // 因为返回了一个函数，我们可以 new F()，所以需要判断
+    if (this instanceof F) {
+      return new _this(...args, ...arguments)
+    }
+    return _this.apply(context, args.concat(...arguments))
+  }
+}
+```
