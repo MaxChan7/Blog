@@ -798,15 +798,19 @@ console.log(a()()()); // Window
 - 改变了 `this` 指向，让新的对象可以执行该函数。那么思路是否可以变成给新的对象添加一个函数，然后在执行完以后删除？
 ```js
 Function.prototype.myCall = function (context) {
-  var context = context || window
-  // 给 context 添加一个属性
-  context.fn = this
-  // 将 context 后面的参数取出来
-  var args = [...arguments].slice(1)
-  var result = context.fn(...args)
+  // 避免传入的对象是null导致报错
+  if (typeof context === 'object') {
+    context = context || window
+  } else {
+    context = Object.create(null)
+  }
+  // 避免对象本身就有fn这个方法造成覆盖
+  let fn = Symbol()
+  context[fn] = this
+  // 将 context 后面的参数取出来并调用context[fn]
+  context[fn]([...arguments].slice(1))
   // 删除 fn
   delete context.fn
-  return result
 }
 ```
 
@@ -814,20 +818,25 @@ Function.prototype.myCall = function (context) {
 
 ```js
 Function.prototype.myApply = function (context) {
-  var context = context || window
-  context.fn = this
+  // 避免传入的对象是null导致报错
+  if (typeof context === 'object') {
+    context = context || window
+  } else {
+    context = Object.create(null)
+  }
+  // 避免对象本身就有fn这个方法
+  let fn = Symbol()
+  context[fn] = this
 
-  var result
   // 需要判断是否存储第二个参数
   // 如果存在，就将第二个参数展开
   if (arguments[1]) {
-    result = context.fn(...arguments[1])
+    context[fn](...arguments[1])
   } else {
-    result = context.fn()
+    context[fn]()
   }
-
+  // 删除 fn
   delete context.fn
-  return result
 }
 ```
 
