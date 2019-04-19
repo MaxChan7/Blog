@@ -859,3 +859,19 @@ Function.prototype.myBind = function (context) {
   }
 }
 ```
+
+## Promise
+
+`Promise` 是 ES6 新增的语法，解决了回调地狱的问题。
+
+一个`Promise`有以下几种状态:
+
+- `pending`: 初始状态，既不是成功，也不是失败状态。
+- `fulfilled`: 意味着操作成功完成。
+- `rejected`: 意味着操作失败。
+
+pending 状态的 Promise 对象可能会变为fulfilled 状态并传递一个值给相应的状态处理方法，也可能变为失败状态（rejected）并传递失败信息。当其中任一种情况出现时，Promise 对象的 `then` 方法绑定的处理方法（handlers ）就会被调用（then方法包含两个参数：onfulfilled 和 onrejected，它们都是 Function 类型。当Promise状态为fulfilled时，调用 then 的 onfulfilled 方法，当Promise状态为rejected时，调用 then 的 onrejected 方法， 所以在异步操作的完成和绑定处理方法之间不存在竞争）。
+
+因为 `Promise.prototype.then` 和  `Promise.prototype.catch` 方法返回promise 对象， 所以它们可以被链式调用。
+
+![promise](../.vuepress/assets/img/frontend/promise.png)
