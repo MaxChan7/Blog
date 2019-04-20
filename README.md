@@ -3,14 +3,19 @@
 
 ## Javascript系列
 
-1. [内置类型](https://maxchan7.github.io/Blog/frontend/#内置类型)
-2. [类型转换](https://maxchan7.github.io/Blog/frontend/#类型转换)
-3. [typeof和instanceof](https://maxchan7.github.io/Blog/frontend/#typeof-和-instanceof)
-4. [变量提升](https://maxchan7.github.io/Blog/frontend/#变量提升)
-5. [闭包](https://maxchan7.github.io/Blog/frontend/#闭包)
-6. [原型和原型链](https://maxchan7.github.io/Blog/frontend/#原型和原型链)
-7. [new](https://maxchan7.github.io/Blog/frontend/#new)
-8. [this、call、apply和bind](https://maxchan7.github.io/Blog/frontend/#this、call、apply和bind)
+1. [内置类型](https://maxchan7.github.io/Blog/frontend/js.html#内置类型)
+2. [类型转换](https://maxchan7.github.io/Blog/frontend/js.html#类型转换)
+3. [typeof和instanceof](https://maxchan7.github.io/Blog/frontend/js.html#typeof-和-instanceof)
+4. [变量提升](https://maxchan7.github.io/Blog/frontend/js.html#变量提升)
+5. [闭包](https://maxchan7.github.io/Blog/frontend/js.html#闭包)
+6. [原型和原型链](https://maxchan7.github.io/Blog/frontend/js.html#原型和原型链)
+7. [new](https://maxchan7.github.io/Blog/frontend/js.html#new)
+8. [this、call、apply和bind](https://maxchan7.github.io/Blog/frontend/js.html#this、call、apply和bind)
+9. [Promise](https://maxchan7.github.io/Blog/frontend/js.html#Promise)
+
+## CSS系列
+
+1. [水平并垂直居中的N种姿势](https://maxchan7.github.io/Blog/frontend/css#水平并垂直居中的n种姿势)
 
 ## 分享
 

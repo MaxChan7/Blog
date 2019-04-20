@@ -8,7 +8,7 @@ module.exports = {
     themeConfig: {
         nav: [
             { text: '首页', link: '/' },
-            { text: '前端', link: '/frontend/' },
+            { text: '前端', link: '/frontend/js' },
             { text: '分享', link: '/sharing/' },
             { text: 'Github', link: 'https://github.com/MaxChan7' }
         ],
@@ -17,7 +17,8 @@ module.exports = {
                 title: '前端',
                 collapsable: false,
                 children: [
-                    '/frontend/',
+                    '/frontend/js',
+                    '/frontend/css',
                 ]
             },
             {
