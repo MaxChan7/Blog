@@ -9,7 +9,7 @@ module.exports = {
         nav: [
             { text: '首页', link: '/' },
             { text: '前端', link: '/frontend/js' },
-            { text: '分享', link: '/sharing/' },
+            { text: '分享', link: '/sharing/测颜值踩坑之旅' },
             { text: 'Github', link: 'https://github.com/MaxChan7' }
         ],
         sidebar: [
