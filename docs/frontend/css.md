@@ -17,7 +17,7 @@
 3. flex
 4. grid
 5. lineheight
-6. writing-mode
+6. [writing-mode](https://www.zhangxinxu.com/wordpress/2016/04/css-writing-mode/)
 
 ```html
 <!-- 公用html部分 -->
@@ -94,10 +94,66 @@
 
 // table
 .wrap {
-  display: table;
-}
-.box {
   display: table-cell;
+  text-align: center;
   vertical-align: middle;
 }
+.box {
+  display: inline-block;
+}
+
+// flex
+.wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// grid 兼容性差，不如flex，不推荐使用。
+.wrap {
+  display: grid;
+}
+.box {
+  align-self: center;
+  justify-self: center;
+}
+
+// lineheight 适用于行内元素
+.wrap {
+  text-align: center;
+  font-size: 0px;
+}
+.box {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 300px; // 行高等于父元素高度
+}
+
+// writing-mode 不常用，作为一个扩展，了解一下就行
+.wrap {
+  writing-mode: vertical-lr;
+  text-align: center;
+}
+.wrap-inner {
+  writing-mode: horizontal-tb;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+}
+.box {
+  display: inline-block;
+  margin: auto;
+  text-align: left;
+}
 ```
+
+```html
+// writing-mode用到的html
+<div class="wrap">
+    <div class="wrap-inner">
+        <div class="box">123123</div>
+    </div>
+</div>
+```
+
+水平并垂直居中的方法暂时就分享以上几种方法，想到其他的再补充...
