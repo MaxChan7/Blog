@@ -27,6 +27,7 @@ module.exports = {
                 children: [
                     '/sharing/测颜值踩坑之旅',
                     '/sharing/H5玩转下拉上滑',
+                    '/sharing/玩转SVG动画',
                 ]
             }
         ],
