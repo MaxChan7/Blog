@@ -21,3 +21,4 @@
 
 1. [一次刷脸测年终奖的踩坑之旅](https://maxchan7.github.io/Blog/sharing/测颜值踩坑之旅.html)
 2. [H5玩转下拉上滑](https://maxchan7.github.io/Blog/sharing/H5玩转下拉上滑.html)
+3. [玩转SVG动画](https://maxchan7.github.io/Blog/sharing/玩转SVG动画.html)
